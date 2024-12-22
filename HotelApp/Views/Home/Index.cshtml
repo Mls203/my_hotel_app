@@ -1,0 +1,179 @@
+﻿
+@model HotelApp.Models.Hotel
+@{
+    
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+          type="text/css" />
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+   
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.2s ease-in-out;
+        }
+
+            .card:hover {
+                transform: scale(1.05);
+            }
+
+            .card h3 {
+                margin: 0;
+                font-size: 1.5em;
+                color: #333;
+            }
+
+        .card {
+            width: 300px;
+            height: 400px; 
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #fff;
+        }
+
+         
+            .card img {
+                width: 100%; 
+                height: 100%; 
+                object-fit: cover;
+            }
+
+        button {
+            border: none; 
+            outline: none; 
+            background-color: #fff; 
+            color: white; 
+            padding: 10px 20px; 
+            cursor: pointer; 
+            border-radius: 5px;
+            font-size: 16px; 
+        }
+
+           
+            button:hover {
+                background-color: #f4f4f4; 
+                border-color: #fff;
+            }
+    </style>
+
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1 style="text-align:center; margin-top: 20px;">Hotels</h1>
+    <div class="container" id="hotelList">
+     
+    </div>
+    
+
+    <script>
+        $(document).ready(function () {
+
+            $.ajax({
+                url: "../api/Hotels", 
+                type: "GET",
+                dataType: "json", 
+                success: function (result) {
+                    const hotelList = $("#hotelList");
+                    console.log(result);
+                    
+                    for (let i = 0; i < result.length; i++) {
+
+                        console.log(result[i].Name);
+                        const card = `
+                    <div class="card">
+                        <img src="${result[i].ImageUrl}" alt="${result[i].Name}">
+                        <button type="button" class="btn-details" data-id="${result[i].Id}"><h3>${result[i].Name}<h3></button>
+                    </div>
+                `;
+                        hotelList.append(card);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Hata oluştu: ", error);
+                }
+            });
+        });
+
+        $(document).ready(function () {
+            $(document).on('click', '.btn-details', function () {
+                
+                var hotelId = $(this).data();
+                for (var key in hotelId) {
+
+                    var id = hotelId[key];
+                }
+                //console.log(id);
+                $.ajax({
+                    url: "../Home/Detail",
+                    type: "get",
+                    data: { id: id },
+                    success: function (detail) {
+                        console.log("success");
+                        window.location.href = '/Home/Detail?id='+id;
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("error: ", error);
+                    }
+                });
+                function sendDataToController(hotelData) {
+                  
+                    console.log("Hotel Data: ", hotelData);  
+
+                }
+
+            });
+
+        });
+
+    </script>
+</body>
+</html>
